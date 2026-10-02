@@ -1,4 +1,4 @@
-# **Meadow** — "A living low-poly creature simulation"
+# **Meadow** — A living low-poly creature simulation
 
 Open `index.html` in a browser, or serve the folder:
 
