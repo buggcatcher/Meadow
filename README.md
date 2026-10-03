@@ -2,13 +2,13 @@
 
 A living, low-poly creature simulation you can watch, tend, and shape.
 
-![Meadow](docs/meadow-preview.png)
+![Meadow](docs/screenshot.png)
 
 Place little mushroom and cactus creatures on a tessellated world, and watch them
 roam, meet, bond, and evolve. It runs entirely in the browser — a single
 self‑contained page, no install, no build step.
 
-**Live:** served from the `docs/` folder via GitHub Pages.
+**Live:** served `[here](https://buggcatcher.github.io/Meadow/)`.
 
 ---
 
@@ -56,7 +56,6 @@ another, and leave a mark that everyone can see.
 
 Planned alongside it:
 
-- a **day/night cycle** with a communal rhythm,
 - a shared **hearth** to gather around in the evening — for warmth, cooking, and
   forming bonds,
 - trails and history that the land itself remembers.
@@ -69,8 +68,11 @@ Planned alongside it:
 
 - **Tap/click the ground** to place the selected creature (pick a species from the bar
   at the bottom first).
-- **Drag a creature** to move it; **drag the ground** to pan the camera.
+- **Pick up and drag a creature** to place it; **drag the ground** to pan the camera.
 - **Scroll / pinch** to zoom (the camera tilts toward the horizon as you zoom in).
 - **Rotate** the view with the on‑screen buttons.
 - **Right‑click / long‑press** a creature for its menu (moves & interactions).
 
+---
+
+`built with claude pro in 3 sessions`
