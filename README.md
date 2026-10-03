@@ -41,7 +41,6 @@ shaped by what it perceives and who it knows:
   dense forest are impassable, creatures stay on the terrain surface, and every action
   is validated against the world's rules. The idea is simple:
 
-  > **Perception suggests · the code decides · the world executes.**
 
 You are part of the loop too: placing, petting, and moving creatures nudges the little
 community along. The design goal is a world where *life emerges from interaction* —
