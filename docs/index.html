@@ -28,7 +28,6 @@
   #field{position:absolute;inset:0;touch-action:none}
   #ter{position:absolute;inset:0;display:block;cursor:grab}
   body.panning #ter{cursor:grabbing} body.placing #ter,body.arming #ter{cursor:copy}
-  .links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
   .heart{position:absolute;font-size:15px;pointer-events:none;transform:translate(-50%,-100%);color:#ffb4c4;z-index:40;will-change:transform,opacity}
   @media (prefers-reduced-motion:no-preference){.heart{animation:rise 1s ease-out forwards}
     @keyframes rise{0%{opacity:0;transform:translate(-50%,0) scale(.4)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-46px) scale(1)}}}
@@ -59,6 +58,7 @@
   .menu .sub2{font-size:11px;color:var(--muted);padding:0 9px 5px}
   .menu .ev{font-size:11px;color:var(--glow);padding:0 9px 6px;border-bottom:1px solid var(--line);margin-bottom:4px}
   .menu .frline{font-size:11.5px;color:var(--leaf);padding:2px 9px 5px}
+  .menu .fbar{position:absolute;left:0;bottom:0;height:2px;background:#f4a259;border-radius:0 0 11px 11px;transition:width .12s linear}
   .menu button{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;background:none;border:0;color:var(--ink);padding:7px 9px;border-radius:7px;cursor:pointer;text-align:left;font:inherit}
   .menu button:hover{background:rgba(255,255,255,.08)} .menu button.rm{color:#f0b0a8} .menu .chev{color:var(--muted);font-size:12px}
   #load{position:absolute;inset:0;display:grid;place-items:center;background:#0d141a;z-index:100;color:var(--muted);font-size:13px;transition:opacity .4s}
@@ -73,19 +73,39 @@
   .stats .row{display:flex;justify-content:space-between;gap:10px;margin:3px 0}
   .stats .bar{height:7px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:3px}
   .stats .bar i{display:block;height:100%}
+  #menuBtn{position:absolute;top:16px;left:16px;z-index:60;width:42px;height:42px;border-radius:11px;border:1px solid var(--line);background:rgba(13,20,26,.6);backdrop-filter:blur(8px);color:var(--ink);font-size:19px;cursor:pointer;display:grid;place-items:center;pointer-events:auto}
+  #menuBtn:hover{background:rgba(255,255,255,.1)}
+  .topr{margin-left:auto;text-align:right;background:rgba(13,20,26,.55);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:12px;padding:8px 12px;line-height:1.3}
+  .topr .ttl{font-family:"Fraunces",serif;font-weight:600;font-size:18px;color:var(--ink)}
+  .topr .tsub{font-size:11px;color:var(--muted)}
+  .topr .cnt{font-size:11.5px;color:var(--muted);margin-top:3px}.topr .cnt b{color:var(--ink);font-variant-numeric:tabular-nums}
+  .modal{position:absolute;inset:0;z-index:200;background:rgba(8,12,16,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:20px;pointer-events:auto}
+  .modal.show{display:flex}
+  .mbox{position:relative;max-width:460px;width:100%;max-height:82vh;overflow:auto;background:rgba(11,17,22,.97);border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.5);color:var(--ink);font-size:13.5px;line-height:1.5}
+  .mbox h2{font-family:"Fraunces",serif;font-weight:600;font-size:22px;margin:0 0 4px}
+  .mbox h3{font-family:"Fraunces",serif;font-size:14px;margin:14px 0 4px;color:var(--leaf)}
+  .mbox p,.mbox li{color:var(--muted)} .mbox ul{margin:4px 0;padding-left:18px}
+  .mclose{position:absolute;top:10px;right:12px;background:none;border:0;color:var(--muted);font-size:22px;cursor:pointer;line-height:1}
+  .mbtn{margin-top:16px;width:100%;padding:10px;border-radius:10px;border:1px solid var(--leaf);background:rgba(127,214,172,.16);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+  .mrow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0;padding:10px 0;border-top:1px solid var(--line)}
+  .toggle{width:46px;height:26px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid var(--line);position:relative;cursor:pointer;flex:none}
+  .toggle i{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#bbb;transition:left .15s,background .15s}
+  .toggle.on{background:rgba(127,214,172,.3)} .toggle.on i{left:22px;background:var(--leaf)}
+  .loadwrap{margin-top:16px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;padding:8px}
+  .spin-sm{display:inline-block;width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.18);border-top-color:var(--leaf);animation:spin .8s linear infinite;vertical-align:middle;margin-right:8px}
 </style>
 </head>
 <body>
   <div id="field">
     <canvas id="ter"></canvas>
-    <svg class="links" id="links" preserveAspectRatio="none"></svg>
-  </div>
+    </div>
   <div class="banner" id="banner"></div>
+  <button id="menuBtn" aria-label="Menu">☰</button>
   <header>
-    <div><h1>Il Territorio</h1>
-      <div class="sub">Scegli una creatura e tocca la terra per posarla - si evolve muovendosi - trascina per spostarti - zoom + / - - ruota &#8635; / &#8634;.</div></div>
-    <div class="tally"><b id="n-total">0</b> creature<br>tue: <b id="n-mine">0</b></div>
+    <div class="topr"><div class="ttl">Meadow</div><div class="tsub">una simulazione low-poly vivente</div>
+      <div class="cnt"><b id="n-total">0</b> creature · tue <b id="n-mine">0</b></div></div>
   </header>
+  <div id="modal" class="modal"><div class="mbox"><button class="mclose" id="mclose" aria-label="Chiudi">×</button><div id="mbody"></div></div></div>
   <div class="clock" id="clock">☀ Giorno</div>
   <div class="stats" id="stats"></div>
   <div class="note" id="note"></div>
@@ -67799,7 +67819,7 @@ const MODELS={"m0":{
   const PAL={mushroom:'#e07a5f',cactus:'#6a994e'};
 
   // ---------- three basics ----------
-  const field=document.getElementById('field'),linksEl=document.getElementById('links');
+  const field=document.getElementById('field');
   const canvas=document.getElementById('ter');
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
   renderer.setClearColor(0xbfe0f5,1);renderer.outputEncoding=THREE.sRGBEncoding;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;
@@ -67811,7 +67831,7 @@ const MODELS={"m0":{
   const target=new THREE.Vector3(0,0,0);
   const ZMIN=0.45,ZMAX=7.1;
   function resize(){Wv=field.clientWidth;Hv=field.clientHeight;renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));renderer.setSize(Wv,Hv,false);
-    linksEl.setAttribute('viewBox','0 0 '+Wv+' '+Hv);updateCam();}
+    updateCam();}
   function updateCam(){const asp=Wv/Hv||1;camera.aspect=asp;camera.fov=FOV;
     const PITCH=pitchFor(zoom),cp=Math.cos(PITCH),sp=Math.sin(PITCH),R=56/zoom;camera.near=Math.max(0.2,R*0.05);camera.far=R+2000;camera.updateProjectionMatrix();
     camera.position.set(target.x+Math.sin(yaw)*cp*R,target.y+sp*R,target.z+Math.cos(yaw)*cp*R);camera.up.set(0,1,0);camera.lookAt(target);}
@@ -67826,13 +67846,16 @@ const MODELS={"m0":{
   function biomeAt(wx,wy){const t=tileIJ(wx,wy);return TG[t[1]][t[0]];}
   function snapWalk(wx,wy){if(walkable(wx,wy))return {wx,wy};const i0=Math.round(wx/d),j0=Math.round(wy/d);for(let r=1;r<8;r++)for(let a=-r;a<=r;a++)for(let b=-r;b<=r;b++){if(Math.max(Math.abs(a),Math.abs(b))!==r)continue;const wx2=(i0+a)*d,wy2=(j0+b)*d;if(walkable(wx2,wy2))return {wx:wx2,wy:wy2};}return {wx,wy};}
   function walkable(wx,wy){const t=tileIJ(wx,wy),i=t[0],j=t[1],kk=i+'_'+j;if(bridgeTiles.has(kk)){if(WATER[TG[j][i]])return Math.abs((wx-bridgeCtrX)*bridgeNx+(wy-bridgeCtrY)*bridgeNy)<d*0.42;return true;}if(treeTiles.has(kk))return false;return !WATER[TG[j][i]];}
-  function tileH(wx,wy){return EH[biomeAt(wx,wy)]||0;}
   function ehAt(i,j){i=Math.max(0,Math.min(NX-1,i));j=Math.max(0,Math.min(NY-1,j));const b=TG[j][i];return WATER[b]?0:(EH[b]||0);}
   function heightAt(wx,wy){const fx=wx/d,fy=wy/d;let i=Math.floor(fx),j=Math.floor(fy);const tx=fx-i,ty=fy-j;
     const h00=ehAt(i,j),h10=ehAt(i+1,j),h01=ehAt(i,j+1),h11=ehAt(i+1,j+1);
     return (h00*(1-tx)+h10*tx)*(1-ty)+(h01*(1-tx)+h11*tx)*ty;}
   let terrainMesh=null;const downRay=new THREE.Raycaster();const _dorig=new THREE.Vector3(),_ddir=new THREE.Vector3(0,-1,0);
-  function groundY(wx,wy){if(!terrainMesh)return heightAt(wx,wy)*HH;_dorig.set(w2sx(wx),100,w2sz(wy));downRay.set(_dorig,_ddir);const h=downRay.intersectObjects(bridgeMesh?[bridgeMesh,terrainMesh]:[terrainMesh],true);return h.length?h[0].point.y+0.02:heightAt(wx,wy)*HH;}
+  let gyGrid=null;
+  function buildGroundCache(){if(!terrainMesh)return;terrainMesh.updateMatrixWorld(true);gyGrid=new Float32Array(NX*NY);for(let j=0;j<NY;j++)for(let i=0;i<NX;i++){_dorig.set(w2sx(i*d),100,w2sz(j*d));downRay.set(_dorig,_ddir);const h=downRay.intersectObject(terrainMesh,true);gyGrid[j*NX+i]=h.length?h[0].point.y:heightAt(i*d,j*d)*HH;}}
+  function groundY(wx,wy){const t=tileIJ(wx,wy),ii=t[0],jj=t[1];if(bridgeMesh&&bridgeTiles.has(ii+'_'+jj)){_dorig.set(w2sx(wx),100,w2sz(wy));downRay.set(_dorig,_ddir);const h=downRay.intersectObjects([bridgeMesh,terrainMesh],true);return h.length?h[0].point.y+0.02:heightAt(wx,wy)*HH;}
+    if(gyGrid){const fx=wx/d,fy=wy/d;let ai=Math.max(0,Math.min(NX-2,Math.floor(fx))),aj=Math.max(0,Math.min(NY-2,Math.floor(fy)));const tx=Math.max(0,Math.min(1,fx-ai)),ty=Math.max(0,Math.min(1,fy-aj));const g00=gyGrid[aj*NX+ai],g10=gyGrid[aj*NX+ai+1],g01=gyGrid[(aj+1)*NX+ai],g11=gyGrid[(aj+1)*NX+ai+1];return ((g00*(1-tx)+g10*tx)*(1-ty)+(g01*(1-tx)+g11*tx)*ty)+0.02;}
+    if(!terrainMesh)return heightAt(wx,wy)*HH;_dorig.set(w2sx(wx),100,w2sz(wy));downRay.set(_dorig,_ddir);const h=downRay.intersectObject(terrainMesh,true);return h.length?h[0].point.y+0.02:heightAt(wx,wy)*HH;}
 
   // ---------- terrain mesh ----------
   function hex(c){return new THREE.Color(c);}
@@ -67901,7 +67924,7 @@ const MODELS={"m0":{
     for(const P of TR){const c=hex(COL[P.k]||'#888');c.multiplyScalar(0.86);if(WATER[P.k])face(P.p,c,0);else{face(P.p,c,null);landSkirts(P,c);}}
     const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(col,3));geo.computeVertexNormals();
     const mat=new THREE.MeshStandardMaterial({color:0xbcbcbc,vertexColors:true,roughness:1,metalness:0,flatShading:true,side:THREE.DoubleSide});
-    const mesh=new THREE.Mesh(geo,mat);mesh.castShadow=false;mesh.receiveShadow=true;terrainMesh=mesh;scene.add(mesh);
+    const mesh=new THREE.Mesh(geo,mat);mesh.castShadow=false;mesh.receiveShadow=true;terrainMesh=mesh;scene.add(mesh);buildGroundCache();
     const slab=new THREE.Mesh(new THREE.BoxGeometry(XMAX*S+6,2,YMAX*S+6),new THREE.MeshStandardMaterial({color:0x10171d,roughness:1}));slab.position.y=-1.21;slab.receiveShadow=true;scene.add(slab);
   }
   function buildFlora(){
@@ -67928,7 +67951,7 @@ const MODELS={"m0":{
 
   // ---------- lights ----------
   const hemi=new THREE.HemisphereLight(0xbfd4e6,0x33302a,0.62);scene.add(hemi);
-  const DAYLEN=600,FIRE_BURN=45;let daylight=1,firePos=null,fireGrp=null,fireLight=null,flameMesh=null,forestCenters=[],fireWood=3,fireLit=true,fireTimer=45;
+  const DAYLEN=600,FIRE_BURN=45;const creatureMats=[];let daylight=1,firePos=null,fireGrp=null,fireLight=null,flameMesh=null,forestCenters=[],fireWood=3,fireLit=true,fireTimer=45;
   const sun=new THREE.DirectionalLight(0xfff1d6,1.0);sun.position.set(60,120,40);scene.add(sun);sun.castShadow=true;sun.shadow.mapSize.set(4096,4096);sun.shadow.camera.near=10;sun.shadow.camera.far=420;sun.shadow.camera.left=-75;sun.shadow.camera.right=75;sun.shadow.camera.top=75;sun.shadow.camera.bottom=-75;sun.shadow.bias=-0.0004;sun.shadow.normalBias=0.04;scene.add(sun.target);
 
   // ---------- model prototypes ----------
@@ -67941,7 +67964,7 @@ const MODELS={"m0":{
   // ---------- creatures ----------
   const data=new Map();let myId=null,mode='connecting',dbRef=null,userRef=null,nameCache={},currentSel=null,armed=false,selected=null;
   const rand=(a,b)=>a+Math.random()*(b-a);
-  const NA=['Pip','Muschio','Felce','Rovo','Ciuffo','Nino','Bombo','Fico','Cardo','Fava','Otto','Acero','Nocciola','Fiocco','Timo','Mora','Spino','Gambo','Lume','Boletino'];
+  const NA=['Muschio','Felce','Rovo','Ciuffo','Fico','Cardo','Fava','Acero','Nocciola','Fiocco','Timo','Mora','Spino','Gambo','Boletino','Teodorico','Fausto','Rinaldo','Alarico','Ivaldo','Cataldo','Gualtieri','Manfredo','Rodrigo','Astolfo','Bradamante','Ruggero','Angelica','Imelda','Beatrice','Sibilla','Ildegarda','Brunilde','Vanda','Giselda','Cunegonda','Ermenegarda','Costanza','Berengaria','Teodolinda'];
   const genName=()=>NA[Math.floor(Math.random()*NA.length)];
   function stageKey(cr){return SPECIES[cr.species].stages[cr.stage];}
   function targetH(cr){return SPECIES[cr.species].th[cr.stage]*0.375;}
@@ -67955,12 +67978,12 @@ const MODELS={"m0":{
   function buildModel(cr){const proto=PROTO[stageKey(cr)];const clone=THREE.SkeletonUtils.clone(proto.scene);
     const grp=new THREE.Group();grp.add(clone);grp.userData.id=cr.id;grp.position.set(w2sx(cr.wx),groundY(cr.wx,cr.wy),w2sz(cr.wy));grp.rotation.y=cr.yaw||0;
     grp.traverse(o=>{if(o.isMesh){o.frustumCulled=false;o.castShadow=true;o.receiveShadow=true;}});
-    const hb=new THREE.Mesh(new THREE.BoxGeometry(1.1,1.25,1.1),new THREE.MeshBasicMaterial({visible:false}));hb.position.y=0.6;hb.userData.id=cr.id;hb.frustumCulled=false;grp.add(hb);const lw=new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.055,0.5,6),new THREE.MeshStandardMaterial({color:0x6b4a2b,roughness:1}));lw.rotation.z=1.5708;lw.position.set(0,1.15,0.12);lw.visible=false;lw.castShadow=true;lw.frustumCulled=false;grp.add(lw);cr._log=lw;
+    const hb=new THREE.Mesh(new THREE.BoxGeometry(1.1,1.25,1.1),new THREE.MeshBasicMaterial({visible:false}));hb.position.y=0.6;hb.userData.id=cr.id;hb.frustumCulled=false;grp.add(hb);const lw=new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.055,0.5,6),new THREE.MeshStandardMaterial({color:0x6b4a2b,roughness:1}));lw.rotation.z=1.5708;lw.position.set(0,1.15,0.12);lw.visible=(cr.holding==='legna');lw.castShadow=true;lw.frustumCulled=false;grp.add(lw);cr._log=lw;
     scene.add(grp);
     cr.grp=grp;cr.clone=clone;cr.mixer=new THREE.AnimationMixer(clone);cr.clips=proto.clipsByName;cr.clipList=proto.clips;cr.cur=null;cr.curAction=null;
     cr.base=targetH(cr);cr._spawnT=performance.now();cr._emoteUntil=0;setClip(cr,'Idle',0.01);}
   function disposeModel(cr){if(cr.mixer)cr.mixer.stopAllAction();if(cr.grp){scene.remove(cr.grp);cr.grp.traverse(o=>{if(o.isMesh){o.geometry&&o.geometry.dispose&&0;}});}cr.grp=null;}
-  function evolve(cr){const ev=SPECIES[cr.species].evolveAt;let ns=0;for(let i=0;i<ev.length;i++)if(cr.moveCount>=ev[i])ns=i+1;ns=Math.min(ns,SPECIES[cr.species].stages.length-1);
+  function evolve(cr){const ns=Math.min(cr.stage+1,SPECIES[cr.species].stages.length-1);
     if(ns!==cr.stage){cr.stage=ns;const yaw=cr.grp?cr.grp.rotation.y:cr.yaw;disposeModel(cr);cr.yaw=yaw;buildModel(cr);cr._builtStage=ns;heartAt(cr.wx,cr.wy,5);chime(PAL[cr.species]);say((cr.name||'La creatura')+' si è evoluta: '+STAGENAME[stageKey(cr)]+'!');persistField(cr,'stage');}}
 
   function upsert(rec,fromSnap){let cr=data.get(rec.id);
@@ -67984,13 +68007,12 @@ const MODELS={"m0":{
   function bond(a,b){const A=data.get(a),B=data.get(b);if(!A||!B||a===b)return;A.rel=A.rel||{};B.rel=B.rel||{};A.rel[b]=(A.rel[b]||0)+1;B.rel[a]=(B.rel[a]||0)+1;}
   function friendsText(x){if(!x.rel)return 'non ha ancora incontrato nessuno';const ids=Object.keys(x.rel).filter(id=>data.has(id)).sort((a,b)=>x.rel[b]-x.rel[a]);
     if(!ids.length)return 'non ha ancora incontrato nessuno';return 'conosce '+ids.slice(0,3).map(id=>data.get(id).name||'qualcuno').join(', ')+(ids.length>3?' +'+(ids.length-3):'');}
-  let linkSeg=null;const linkMat=new THREE.LineBasicMaterial({color:0x7fd6ac,transparent:true,opacity:0.9,depthTest:false});
-  function drawLinks(){if(linkSeg){scene.remove(linkSeg);linkSeg.geometry.dispose();linkSeg=null;}
-    if(!currentSel)return;const x=data.get(currentSel);if(!x||!x.rel)return;
-    const pts=[],ax=w2sx(x.wx),ay=groundY(x.wx,x.wy)+0.8,az=w2sz(x.wy);
-    for(const oid in x.rel){const o=data.get(oid);if(!o)continue;pts.push(ax,ay,az,w2sx(o.wx),groundY(o.wx,o.wy)+0.8,w2sz(o.wy));}
-    if(!pts.length)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));
-    linkSeg=new THREE.LineSegments(g,linkMat);linkSeg.renderOrder=6;linkSeg.frustumCulled=false;scene.add(linkSeg);}
+  let linkSeg=null,linkPos=null;const linkMat=new THREE.LineBasicMaterial({color:0x7fd6ac,transparent:true,opacity:0.9,depthTest:false});
+  function drawLinks(){if(!linkSeg){linkPos=new Float32Array(64*6);const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(linkPos,3));linkSeg=new THREE.LineSegments(g,linkMat);linkSeg.frustumCulled=false;linkSeg.renderOrder=6;scene.add(linkSeg);}
+    if(!currentSel){linkSeg.visible=false;return;}const x=data.get(currentSel);if(!x||!x.rel){linkSeg.visible=false;return;}
+    let n=0;const ax=w2sx(x.wx),ay=groundY(x.wx,x.wy)+0.8,az=w2sz(x.wy);
+    for(const oid in x.rel){const o=data.get(oid);if(!o||n>=64)continue;const b=n*6;linkPos[b]=ax;linkPos[b+1]=ay;linkPos[b+2]=az;linkPos[b+3]=w2sx(o.wx);linkPos[b+4]=groundY(o.wx,o.wy)+0.8;linkPos[b+5]=w2sz(o.wy);n++;}
+    linkSeg.geometry.setDrawRange(0,n*2);linkSeg.geometry.attributes.position.needsUpdate=true;linkSeg.visible=n>0;}
 
   // ---------- interactions ----------
   // --- animation taxonomy ---------------------------------------------------
@@ -68005,7 +68027,7 @@ const MODELS={"m0":{
   function pickClip(cr,names){for(const n of names)if(cr.clips&&cr.clips[n])return n;return null;}
   function selfMoves(cr){return SELF_MOVES.filter(m=>cr.clips&&cr.clips[m[0]]);}
   function interAvail(cr){return INTER.filter(it=>!INTER_CLIPS[it[0]]||pickClip(cr,INTER_CLIPS[it[0]]));}
-  const NEAR=1.4*d,SEP=0.6*d;
+  const NEAR=1.4*d,SEP=0.35*d;
   function clearBehavior(x){x.follow=null;x._act=null;}
   let arming=null;
   function startArming(src,kind){closeMenu();clearSel();armed=false;clearDock();arming={srcId:src.id,kind};document.body.classList.add('arming');
@@ -68023,15 +68045,15 @@ const MODELS={"m0":{
 
   // ---------- menu ----------
   let menu=null;
-  let statCr=null;
+  let statCr=null,fireMenuEl=null;
   function updateStats(cr){const el=document.getElementById('stats');if(!el)return;if(!cr){el.classList.remove('show');return;}
     const w=cr.warmth==null?1:cr.warmth,icon=w<0.35?'\u2744':w>0.7?'\u2668':'\u26c5',bc=w<0.4?'#6fb3d6':w>0.7?'#f4a259':'#9ac46a',nb=cr.rel?Object.keys(cr.rel).filter(k=>data.has(k)).length:0;
     el.innerHTML='<div class="st">'+(cr.name||'Creatura')+'</div>'+'<div class="row"><span>Tepore</span><span>'+icon+' '+Math.round(w*100)+'%</span></div>'+'<div class="bar"><i style="width:'+Math.round(w*100)+'%;background:'+bc+'"></i></div>'+'<div class="row"><span>Mosse</span><span>'+(cr.moveCount||0)+'</span></div>'+'<div class="row"><span>Legami</span><span>'+nb+'</span></div>'+(cr.holding?'<div class="row"><span>Porta</span><span>'+cr.holding+'</span></div>':'');
     el.classList.add('show');}
-  function closeMenu(){if(menu){menu.remove();menu=null;}showLegend(false);{const _c=document.getElementById('clock');if(_c)_c.classList.remove('show');}updateStats(null);currentSel=null;drawLinks();}
+  function closeMenu(){if(menu){menu.remove();menu=null;}showLegend(false);{const _c=document.getElementById('clock');if(_c)_c.classList.remove('show');}updateStats(null);fireMenuEl=null;currentSel=null;drawLinks();}
   function placeMenu(x,y){menu.style.left=Math.min(x,innerWidth-menu.offsetWidth-8)+'px';menu.style.top=Math.min(y,innerHeight-menu.offsetHeight-8)+'px';}
   function mkBtn(l,ex,fn,cls){const b=document.createElement('button');b.innerHTML='<span>'+l+'</span>'+(ex?'<span class="chev">'+ex+'</span>':'');if(cls)b.className=cls;b.onclick=fn;return b;}
-  function evText(cr){const ev=SPECIES[cr.species].evolveAt;if(cr.stage>=ev.length)return 'forma finale \u00b7 '+cr.moveCount+' mosse';const nxt=ev[cr.stage];return cr.moveCount+'/'+nxt+' mosse alla prossima evoluzione';}
+  function evText(cr){if(cr.stage>=SPECIES[cr.species].stages.length-1)return 'forma finale \u00b7 '+(cr.moveCount||0)+' mosse';return (cr.moveCount||0)+' mosse \u00b7 ogni 10: 1/3 di evolvere';}
   const editable=cr=>mode==='local'||(cr.owner&&cr.owner===myId);
   function openMenu(x,y,cr){closeMenu();clearSel();{const _c=document.getElementById('clock');if(_c)_c.classList.add('show');}menu=document.createElement('div');menu.className='menu';
     const info='<div class="head">'+(cr.name||'una creatura')+'</div><div class="sub2">'+STAGENAME[stageKey(cr)]+' \u00b7 '+(NAME[biomeAt(cr.wx,cr.wy)]||'')+'</div><div class="ev">'+evText(cr)+'</div><div class="frline">'+friendsText(cr)+'</div>';
@@ -68039,7 +68061,7 @@ const MODELS={"m0":{
     if(cr.holding){const hd=document.createElement('div');hd.className='ev';hd.textContent='Porta: '+cr.holding+' \ud83e\udeb5';menu.appendChild(hd);}
     if(editable(cr)){
       menu.appendChild(mkBtn('Rinomina','',()=>{closeMenu();const v=prompt('Nome',cr.name||'');if(v&&v.trim()){cr.name=v.trim().slice(0,20);persistField(cr,'name');}}));
-      menu.appendChild(mkBtn('Mossa','\u25b8',()=>{const list=[['__wander','Gironzola'],['__roam','Vagabonda'],['__wood','Raccogli legna'],['__stop','Fermati']].concat(selfMoves(cr));submenu(x,y,'Mossa','azioni su di s\u00e9',list,id=>{if(id==='__wander'){clearBehavior(cr);cr.move='wander';cr._wt=null;cr._home={x:cr.wx,y:cr.wy};}else if(id==='__roam'){clearBehavior(cr);cr.move='roam';cr._wt=null;}else if(id==='__stop'){clearBehavior(cr);cr.move=null;cr._emoteUntil=0;}else if(id==='__wood'){clearBehavior(cr);cr.move='gatherwood';cr._wood={phase:'toforest',t:0};cr._wt=null;cr._path=null;}else{playEmote(cr,id);}});}));
+      menu.appendChild(mkBtn('Mossa','\u25b8',()=>{const list=[['__wander','Gironzola'],['__girovaga','Girovaga'],['__roam','Vagabonda'],['__wood','Raccogli legna'],['__stop','Fermati']].concat(selfMoves(cr));submenu(x,y,'Mossa','azioni su di s\u00e9',list,id=>{if(id==='__wander'){clearBehavior(cr);cr.move='wander';cr._wt=null;cr._home={x:cr.wx,y:cr.wy};}else if(id==='__roam'){clearBehavior(cr);cr.move='roam';cr._wt=null;cr._path=null;}else if(id==='__girovaga'){clearBehavior(cr);cr.move='roammid';cr._wt=null;cr._home={x:cr.wx,y:cr.wy};cr._path=null;}else if(id==='__stop'){clearBehavior(cr);cr.move=null;cr._emoteUntil=0;}else if(id==='__wood'){clearBehavior(cr);cr.move='gatherwood';cr._wood={phase:'toforest',t:0};cr._wt=null;cr._path=null;}else{playEmote(cr,id);}});}));
       menu.appendChild(mkBtn('Interagisci con\u2026','\u25b8',()=>submenu(x,y,'Interagisci','poi tocca un bersaglio',interAvail(cr),id=>startArming(cr,id))));
       if(cr.follow||cr._act)menu.appendChild(mkBtn('Smetti di interagire','',()=>{closeMenu();clearBehavior(cr);}));
       menu.appendChild(mkBtn('Rimuovi','',()=>{closeMenu();persistRemove(cr);},'rm'));
@@ -68052,10 +68074,6 @@ const MODELS={"m0":{
 
   // ---------- selection card ----------
   let card=null;function clearSel(){if(card){card.remove();card=null;}currentSel=null;drawLinks();}
-  function pet(cr){cr._reactUntil=performance.now()+900;chime(PAL[cr.species]);heartAt(cr.wx,cr.wy,3);openCard(cr);}
-  function openCard(cr){clearSel();currentSel=cr.id;card=document.createElement('div');card.className='menu';card.style.position='fixed';
-    card.innerHTML='<div class="head">'+(cr.name||'una creatura')+'</div><div class="sub2">'+STAGENAME[stageKey(cr)]+'</div><div class="ev">'+evText(cr)+'</div><div class="frline">'+friendsText(cr)+'</div>';
-    field.appendChild(card);card.addEventListener('pointerdown',e=>e.stopPropagation());drawLinks();}
 
   // ---------- input ----------
   let dragCr=null,down=null,panGrab=null;
@@ -68086,7 +68104,7 @@ const MODELS={"m0":{
     if(!down)return;if(down.lp)clearTimeout(down.lp);document.body.classList.remove('panning');const wasDrag=dragCr;
     if(arming&&down.cr){const src=data.get(arming.srcId),k=arming.kind;cancelArming();doInteraction(src,down.cr,k);}
     else if(down.cr){if(wasDrag&&editable(down.cr))persistField(down.cr,'pos');
-      if(!down.moved){const e2=pickClip(down.cr,['Yes','Wave','Jump','Dance']);if(e2)playEmote(down.cr,e2);chime(PAL[down.cr.species]);heartAt(down.cr.wx,down.cr.wy,2);}
+      if(!down.moved){if(!(down.cr.move||down.cr._act||down.cr.follow)){const e2=pickClip(down.cr,['Yes','Wave','Jump','Dance']);if(e2)playEmote(down.cr,e2);}chime(PAL[down.cr.species]);heartAt(down.cr.wx,down.cr.wy,2);}
       openMenu(e.clientX,e.clientY,down.cr);}
     else if(!down.cr&&!down.moved){if(nearFire(e))openFireMenu(e.clientX,e.clientY);else if(armed){const g=groundHit(e);if(g)placeAt(g.wx,g.wy);}}
     dragCr=null;down=null;panGrab=null;}
@@ -68123,6 +68141,24 @@ const MODELS={"m0":{
   function startZoom(f){zoomT=Math.max(ZMIN,Math.min(ZMAX,zoomT*f));}
   function startRotate(dir){yawT+=dir*Math.PI/4;}
   document.getElementById('zin').onclick=()=>startZoom(1.3);document.getElementById('zout').onclick=()=>startZoom(1/1.3);
+  let shadowsOn=true;
+  const modalEl=document.getElementById('modal'),mbody=document.getElementById('mbody');
+  function showModal(h){mbody.innerHTML=h;modalEl.classList.add('show');}
+  function hideModal(){modalEl.classList.remove('show');}
+  document.getElementById('mclose').onclick=hideModal;
+  modalEl.addEventListener('pointerdown',e=>{if(e.target===modalEl)hideModal();});
+  let bootDone=false;
+  function setIntroAction(){const el=document.getElementById('introAction');if(!el)return;if(bootDone){el.innerHTML='<button class="mbtn" id="introStart">Inizia</button>';const b=document.getElementById('introStart');if(b)b.onclick=hideModal;}else{el.innerHTML='<div class="loadwrap"><span class="spin-sm"></span>Caricamento della mappa\u2026</div>';}}
+  function showIntro(){showModal('<h2>Meadow</h2><p>Un piccolo mondo vivente low-poly: posi delle creature, le guardi crescere, muoversi e intrecciare legami.</p>'
+    +'<h3>Le creature</h3><ul><li>Scegli una specie dalla barra in basso e <b>tocca la terra</b> per posarla.</li><li>Si <b>evolvono muovendosi</b>: ogni 10 mosse hanno 1/3 di salire di forma.</li><li><b>Trascinale</b> per spostarle; <b>tasto destro</b> o tocco per il menu (Mosse e Interazioni).</li><li>Incontrandosi stringono <b>legami</b> che influenzano le loro scelte.</li></ul>'
+    +'<h3>Giorno e notte</h3><ul><li>Il <b>sole</b> gira e proietta le ombre; di <b>notte</b> fa freddo.</li><li>Il <b>fal\u00f2</b> va alimentato con la <b>legna</b> (mossa \u201cRaccogli legna\u201d); di notte le creature lo accendono a pugni e si scaldano.</li></ul>'
+    +'<h3>Vista</h3><ul><li>Trascina il terreno per spostarti, <b>zoom</b> con +/- o rotella/pinch, <b>ruota</b> con i pulsanti.</li></ul>'
+    +'<div id="introAction"></div>');setIntroAction();}
+  function showOptions(){showModal('<h2>Menu</h2>'
+    +'<div class="mrow"><span>Ombre del sole</span><div class="toggle'+(shadowsOn?' on':'')+'" id="tgShadow"><i></i></div></div>'
+    +'<p style="font-size:11.5px">Attiva/disattiva la luce del sole che si muove e proietta le ombre sul terreno e sui modelli.</p>'
+    +'<h3>Come si gioca</h3><ul style="font-size:12px"><li>Scegli una specie in basso e <b>tocca la terra</b> per posarla.</li><li>Si <b>evolvono muovendosi</b> (ogni 10 mosse: 1/3).</li><li><b>Tasto destro</b>/tocco: menu con Mosse e Interazioni; trascina per spostarle.</li><li>Di <b>notte</b> fa freddo: alimenta il <b>fal\u00f2</b> con la legna e accendilo.</li><li>Vista: trascina per spostarti, zoom rotella/pinch, ruota coi pulsanti.</li></ul>'    +'<p style="font-size:11.5px;margin-top:12px">Multiplayer: <b>in arrivo</b>.</p>');const tg=document.getElementById('tgShadow');if(tg)tg.onclick=()=>{shadowsOn=!shadowsOn;tg.classList.toggle('on',shadowsOn);};}
+  document.getElementById('menuBtn').onclick=showOptions;showIntro();
   document.getElementById('rccw').onclick=()=>startRotate(-1);document.getElementById('rcw').onclick=()=>startRotate(1);
   field.addEventListener('wheel',e=>{e.preventDefault();startZoom(Math.exp(-e.deltaY*0.0009));},{passive:false});
 
@@ -68139,7 +68175,7 @@ const MODELS={"m0":{
   addEventListener('pointerdown',()=>{nextSpontAt=performance.now()+rand(5000,15000);},true);
   function spontaneous(){const now=performance.now();const free=[];data.forEach(x=>{if(x._act||x.follow||x===dragCr||x.move==='gatherwood'||now<(x._emoteUntil||0))return;free.push(x);});if(!free.length)return;
     const src=free[Math.floor(Math.random()*free.length)];
-    if(firePos&&daylight<0.3&&(src.warmth==null||src.warmth<0.55)){clearBehavior(src);src.move='gofire';src._path=null;return;}
+    if(firePos&&daylight<0.3&&(src.warmth==null||src.warmth<0.55)){if(fireLit){clearBehavior(src);src.move='gofire';src._path=null;return;}else if(fireWood>0){clearBehavior(src);src.move='lightfire';src._path=null;return;}}
     const near=free.filter(x=>x!==src&&Math.hypot(x.wx-src.wx,x.wy-src.wy)<NEAR);
     if(near.length&&Math.random()<0.55){const known=near.filter(x=>src.rel&&src.rel[x.id]);const pool=(known.length&&Math.random()<0.7)?known:near;
       doInteraction(src,pool[Math.floor(Math.random()*pool.length)],['greet','greet','dance','attack','follow','orbit'][Math.floor(Math.random()*6)]);}
@@ -68156,16 +68192,16 @@ const MODELS={"m0":{
     while(open.size&&steps++<6000){let ck=null,cv=null;for(const e of open){if(!cv||e[1].f<cv.f){cv=e[1];ck=e[0];}}open.delete(ck);if(ck===key(ti,tj))break;closed.add(ck);
       for(const dd of[[1,0],[-1,0],[0,1],[0,-1]]){const ni=cv.i+dd[0],nj=cv.j+dd[1];if(!tileWalk(ni,nj))continue;const nk=key(ni,nj);if(closed.has(nk))continue;const ng=g[ck]+1;if(!(nk in g)||ng<g[nk]){g[nk]=ng;came[nk]=ck;const nf=ng+H(ni,nj);const ex=open.get(nk);if(!ex||nf<ex.f)open.set(nk,{i:ni,j:nj,f:nf});}}}
     const tk=key(ti,tj);if(tk!==sk&&!(tk in came))return null;const path=[];let k=tk;while(k){const p=k.split('_');path.push({wx:+p[0]*d,wy:+p[1]*d});if(k===sk)break;k=came[k];}path.reverse();return path;}
-  function followPath(x,gx,gy,sp){const gi=Math.round(gx/d),gj=Math.round(gy/d);if(!x._path||x._pgi!==gi||x._pgj!==gj){x._path=findPath(Math.round(x.wx/d),Math.round(x.wy/d),gi,gj);x._pi=0;x._pgi=gi;x._pgj=gj;}
+  function followPath(x,gx,gy,sp){const gi=Math.round(gx/d),gj=Math.round(gy/d),_nw=performance.now();if(!x._path||((x._pgi!==gi||x._pgj!==gj)&&_nw-(x._ptime||0)>250)){x._path=findPath(Math.round(x.wx/d),Math.round(x.wy/d),gi,gj);x._pi=0;x._pgi=gi;x._pgj=gj;x._ptime=_nw;}
     if(!x._path||!x._path.length)return stepTo(x,gx,gy,sp);let wp=x._path[x._pi];while(wp&&Math.hypot(wp.wx-x.wx,wp.wy-x.wy)<0.45*d){x._pi++;wp=x._path[x._pi];}if(!wp)return stepTo(x,gx,gy,sp);stepTo(x,wp.wx,wp.wy,sp);return Math.hypot(gx-x.wx,gy-x.wy);}
   function setCarry(x,b){if(x._log)x._log.visible=b;x.holding=b?'legna':null;}
   function fspark(wx,wy,sym,col){const p=proj(wx,wy,0.4);const e=document.createElement('div');e.className='heart';e.textContent=sym||'\u2726';e.style.color=col||'#ffd24a';e.style.left=p.x+'px';e.style.top=(p.y)+'px';field.appendChild(e);setTimeout(()=>e.remove(),1050);return e;}
   function fireSpark(){if(flameMesh)flameMesh.visible=true;for(let i=0;i<6;i++){const s2=fspark(firePos.wx+(Math.random()-.5)*0.6,firePos.wy+(Math.random()-.5)*0.6,'\u2726');s2.style.animationDelay=(i*0.05)+'s';}}
   function depositWood(x){fireWood++;fspark(firePos.wx,firePos.wy,'\u2726','#c9a24a');chime(PAL[x.species]);}
   function nearFire(e){if(!firePos)return false;const v=new THREE.Vector3(w2sx(firePos.wx),groundY(firePos.wx,firePos.wy)+0.5,w2sz(firePos.wy));v.project(camera);if(v.z>1)return false;const r=canvas.getBoundingClientRect();const sx=(v.x*.5+.5)*r.width+r.left,sy=(-v.y*.5+.5)*r.height+r.top;return Math.hypot(e.clientX-sx,e.clientY-sy)<75;}
-  function openFireMenu(x,y){closeMenu();clearSel();menu=document.createElement('div');menu.className='menu';menu.innerHTML='<div class="head">Fal\u00f2</div><div class="sub2">Legna: '+fireWood+' \u00b7 '+(fireLit?'Acceso':'Spento')+'</div>';if(!fireLit&&fireWood>0){menu.appendChild(mkBtn('Accendi (scintilla)','\u2726',()=>{closeMenu();fireWood--;fireLit=true;fireTimer=FIRE_BURN;fireSpark();}));}else if(!fireLit){const dd=document.createElement('div');dd.className='frline';dd.textContent='Serve legna per accenderlo';menu.appendChild(dd);}document.body.appendChild(menu);placeMenu(x,y);}
+  function openFireMenu(x,y){closeMenu();clearSel();menu=document.createElement('div');menu.className='menu';menu.innerHTML='<div class="head">Fal\u00f2</div><div class="sub2"><span class="fwood">Legna: '+fireWood+' \u00b7 '+(fireLit?'Acceso':'Spento')+'</span></div>';if(!fireLit&&fireWood>0){menu.appendChild(mkBtn('Accendi (scintilla)','\u2726',()=>{closeMenu();fireWood--;fireLit=true;fireTimer=FIRE_BURN;fireSpark();}));}else if(!fireLit){const dd=document.createElement('div');dd.className='frline';dd.textContent='Serve legna per accenderlo';menu.appendChild(dd);}const fbar=document.createElement('div');fbar.className='fbar';fbar.style.width=(fireLit?Math.max(0,Math.min(1,fireTimer/FIRE_BURN))*100:0)+'%';menu.appendChild(fbar);document.body.appendChild(menu);placeMenu(x,y);fireMenuEl=menu;}
   function tp(id){const x=data.get(id);return x?{x:x.wx,y:x.wy}:null;}
-  function loop(){requestAnimationFrame(loop);const dt=Math.min(clock.getDelta(),0.05),now=performance.now();const tday=(((now/1000)/DAYLEN)+0.5)%1,sa=tday*6.2831853;daylight=0.5-0.5*Math.cos(sa);const SH=140+120*daylight,OR=200;sun.position.set(target.x+Math.cos(sa)*OR,target.y+SH,target.z+Math.sin(sa)*OR);sun.target.position.copy(target);sun.target.updateMatrixWorld();sun.intensity=0.1+1.05*daylight;hemi.intensity=0.16+0.55*daylight;if(sky){const tt=now*0.00010;for(let fi=0;fi<skyPhase.length;fi++){const ff=1+0.03*Math.sin(tt+skyPhase[fi]),b=fi*9;for(let k=0;k<3;k++){const j=b+k*3;const dR=skyBase[j],dG=skyBase[j+1],dB=skyBase[j+2],nR=dR*0.12,nG=dG*0.17,nB=dB*0.34;skyCol.array[j]=Math.min(1,(nR+(dR-nR)*daylight)*ff);skyCol.array[j+1]=Math.min(1,(nG+(dG-nG)*daylight)*ff);skyCol.array[j+2]=Math.min(1,(nB+(dB-nB)*daylight)*ff);}}skyCol.needsUpdate=true;sky.position.copy(camera.position);}if(flameMesh){if(fireLit){fireTimer-=dt;if(fireTimer<=0){if(fireWood>0){fireWood--;fireTimer=FIRE_BURN;}else{fireLit=false;}}}flameMesh.visible=fireLit;if(fireLit){flameMesh.scale.set(1,0.8+0.3*Math.sin(now*0.02)+0.12*Math.sin(now*0.05+1.3),1);flameMesh.rotation.y=now*0.002;const nf=Math.max(0,(1-daylight-0.2)/0.8);if(fireLight)fireLight.intensity=nf*3.0*(0.93+0.06*Math.sin(now*0.006)+0.03*Math.sin(now*0.017));}else if(fireLight)fireLight.intensity=0;}{const cl=document.getElementById('clock');if(cl){const lbl=daylight>0.55?'\u2600 Giorno':daylight>0.25?'\u26c5 Crepuscolo':'\u263d Notte';if(cl.textContent!==lbl)cl.textContent=lbl;}}
+  function loop(){requestAnimationFrame(loop);const dt=Math.min(clock.getDelta(),0.05),now=performance.now();const tday=(((now/1000)/DAYLEN)+0.5)%1,sa=tday*6.2831853;daylight=0.5-0.5*Math.cos(sa);if(daylight>0.4&&(window._prevDay||0)<=0.4&&firePos){data.forEach(x=>{if(!x.grp||x._act||x.follow||x===dragCr)return;if(Math.hypot(x.wx-firePos.wx,x.wy-firePos.wy)<4*d&&Math.random()<0.5){const mv=['wander','roammid','roam'][Math.floor(Math.random()*3)];clearBehavior(x);x.move=mv;x._home={x:x.wx,y:x.wy};x._wt=null;x._path=null;}});}window._prevDay=daylight;const SH=140+120*daylight,OR=200;sun.position.set(target.x+Math.cos(sa)*OR,target.y+SH,target.z+Math.sin(sa)*OR);sun.target.position.copy(target);sun.target.updateMatrixWorld();sun.intensity=Math.max(0,(daylight-0.12)*1.3);hemi.intensity=0.22+0.5*daylight;{const _cei=0.2+0.6*daylight;for(let ci=0;ci<creatureMats.length;ci++)creatureMats[ci].emissiveIntensity=_cei;}sun.castShadow=shadowsOn&&daylight>0.1;if(sky){const tt=now*0.00010;for(let fi=0;fi<skyPhase.length;fi++){const ff=1+0.03*Math.sin(tt+skyPhase[fi]),b=fi*9;for(let k=0;k<3;k++){const j=b+k*3;const dR=skyBase[j],dG=skyBase[j+1],dB=skyBase[j+2],nR=dR*0.12,nG=dG*0.17,nB=dB*0.34;skyCol.array[j]=Math.min(1,(nR+(dR-nR)*daylight)*ff);skyCol.array[j+1]=Math.min(1,(nG+(dG-nG)*daylight)*ff);skyCol.array[j+2]=Math.min(1,(nB+(dB-nB)*daylight)*ff);}}skyCol.needsUpdate=true;sky.position.copy(camera.position);}if(flameMesh){if(fireLit){fireTimer-=dt;if(fireTimer<=0){if(fireWood>0){fireWood--;fireTimer=FIRE_BURN;}else{fireLit=false;}}}flameMesh.visible=fireLit;if(fireLit){flameMesh.scale.set(1,0.8+0.3*Math.sin(now*0.02)+0.12*Math.sin(now*0.05+1.3),1);flameMesh.rotation.y=now*0.002;const nf=Math.max(0,(1-daylight-0.2)/0.8);if(fireLight)fireLight.intensity=nf*3.0*(0.93+0.06*Math.sin(now*0.006)+0.03*Math.sin(now*0.017));}else if(fireLight)fireLight.intensity=0;}{const cl=document.getElementById('clock');if(cl){const lbl=daylight>0.55?'\u2600 Giorno':daylight>0.25?'\u26c5 Crepuscolo':'\u263d Notte';if(cl.textContent!==lbl)cl.textContent=lbl;}}if(fireMenuEl){const fw=fireMenuEl.querySelector('.fwood');if(fw)fw.textContent='Legna: '+fireWood+' \u00b7 '+(fireLit?'Acceso':'Spento');const fb=fireMenuEl.querySelector('.fbar');if(fb)fb.style.width=(fireLit?Math.max(0,Math.min(1,fireTimer/FIRE_BURN))*100:0)+'%';}
     zoom+=(zoomT-zoom)*0.10;yaw+=(yawT-yaw)*0.16;if(Math.abs(zoomT-zoom)>1e-4||Math.abs(yawT-yaw)>1e-4)updateCam();
     if(data.size>0&&now>=nextSpontAt){spontaneous();nextSpontAt=now+rand(5000,15000);}
     // behaviours
@@ -68186,24 +68222,32 @@ const MODELS={"m0":{
         else if(w.phase==='toforest'){if(!w.tgt){let bst=null,bd=1e18;for(const fc of forestCenters){const q=(fc.wx-x.wx)*(fc.wx-x.wx)+(fc.wy-x.wy)*(fc.wy-x.wy);if(q<bd){bd=q;bst=fc;}}w.tgt=bst;}const dd=followPath(x,w.tgt.wx,w.tgt.wy,0.02*d);if(dd<2.5*d){w.phase='collect';w.t=now;x._path=null;const e2=pickClip(x,['Duck','No','Yes']);if(e2)setClipOnce(x,e2);}}
         else if(w.phase==='collect'){if(now-w.t>1200){w.phase='tofire';setCarry(x,true);}}
         else if(w.phase==='tofire'){const dd=Math.hypot(firePos.wx-x.wx,firePos.wy-x.wy);if(dd<1.6*d){depositWood(x);setCarry(x,false);x.move=null;x._wood=null;x._path=null;}else followPath(x,firePos.wx,firePos.wy,0.02*d);}}
-      else if(x.move==='gofire'){if(!firePos){x.move=null;}else{const dd=Math.hypot(firePos.wx-x.wx,firePos.wy-x.wy);if(dd<1.9*d){x._path=null;if(Math.random()<0.004){const e2=pickClip(x,['Yes','Dance']);if(e2)setClipOnce(x,e2);}}else followPath(x,firePos.wx,firePos.wy,0.015*d);}}
-      else if(x.move==='roam'){if(!x._wt||Math.hypot(x._wt.x-x.wx,x._wt.y-x.wy)<0.6*d){let tr=0;do{x._wt={x:rand(0,XMAX),y:rand(0,YMAX)};tr++;}while(!walkable(x._wt.x,x._wt.y)&&tr<30);x._path=null;}
-        followPath(x,x._wt.x,x._wt.y,0.0135*d);}
+      else if(x.move==='lightfire'){if(!firePos){x.move=null;}else if(fireLit){x.move='gofire';x._path=null;}else{const dd=Math.hypot(firePos.wx-x.wx,firePos.wy-x.wy);if(dd<1.7*d){x._path=null;if(now-(x._punchT||0)>1300){x._punchT=now;const pc=pickClip(x,['Punch','Bite_Front']);if(pc)setClipOnce(x,pc);x.yaw=Math.atan2(firePos.wx-x.wx,firePos.wy-x.wy)+FACE_OFF;if(fireWood>0&&Math.random()<1/3){fireWood--;fireLit=true;fireTimer=FIRE_BURN;fireSpark();}}}else followPath(x,firePos.wx,firePos.wy,0.015*d);}}
+      else if(x.move==='gofire'){if(!firePos||!fireLit){x.move=null;}else{const dd=Math.hypot(firePos.wx-x.wx,firePos.wy-x.wy);if(dd<1.9*d){x._path=null;if(Math.random()<0.004){const e2=pickClip(x,['Yes','Dance']);if(e2)setClipOnce(x,e2);}}else followPath(x,firePos.wx,firePos.wy,0.015*d);}}
+      else if(x.move==='roam'){if(!x._wt||Math.hypot(x._wt.x-x.wx,x._wt.y-x.wy)<0.6*d){let tr=0;do{x._wt={x:rand(0,XMAX),y:rand(0,YMAX)};tr++;}while((!walkable(x._wt.x,x._wt.y)||Math.hypot(x._wt.x-x.wx,x._wt.y-x.wy)<6*d)&&tr<45);x._path=null;}
+        followPath(x,x._wt.x,x._wt.y,0.0145*d);}
+      else if(x.move==='roammid'){if(!x._home)x._home={x:x.wx,y:x.wy};
+        if(!x._wt||Math.hypot(x._wt.x-x.wx,x._wt.y-x.wy)<0.4*d){let tr=0;do{const an=rand(0,6.2832),r=rand(1.5,5)*d;x._wt={x:Math.max(0,Math.min(XMAX,x._home.x+Math.cos(an)*r)),y:Math.max(0,Math.min(YMAX,x._home.y+Math.sin(an)*r))};tr++;}while(!walkable(x._wt.x,x._wt.y)&&tr<25);x._path=null;}
+        followPath(x,x._wt.x,x._wt.y,0.013*d);}
       else if(x.move==='wander'){if(!x._home)x._home={x:x.wx,y:x.wy};
         if(!x._wt||Math.hypot(x._wt.x-x.wx,x._wt.y-x.wy)<0.25*d){let tr=0;do{const an=rand(0,6.2832),r=rand(0.4,1.5)*d;x._wt={x:Math.max(0,Math.min(XMAX,x._home.x+Math.cos(an)*r)),y:Math.max(0,Math.min(YMAX,x._home.y+Math.sin(an)*r))};tr++;}while(!walkable(x._wt.x,x._wt.y)&&tr<20);}
         const dx=x._wt.x-x.wx,dy=x._wt.y-x.wy,dd=Math.hypot(dx,dy)||1,s=Math.min(0.0135*d,dd);if(!tryMove(x,x.wx+dx/dd*s,x.wy+dy/dd*s))x._wt=null;}});
     // separation
     const list=[];data.forEach(x=>{if(x!==dragCr&&!x._act)list.push(x);});
-    for(let i=0;i<list.length;i++)for(let j=i+1;j<list.length;j++){const a=list[i],b=list[j];let dx=b.wx-a.wx,dy=b.wy-a.wy,ds=Math.hypot(dx,dy);
-      if(ds===0){dx=Math.random()-.5;dy=Math.random()-.5;ds=Math.hypot(dx,dy)||1;}
-      if(ds<SEP){const push=(SEP-ds)/2*0.5,ux=dx/ds,uy=dy/ds;const ax=a.wx-ux*push,ay=a.wy-uy*push,bx=b.wx+ux*push,by=b.wy+uy*push;
-        if(walkable(ax,ay)){a.wx=Math.max(0,Math.min(XMAX,ax));a.wy=Math.max(0,Math.min(YMAX,ay));}if(walkable(bx,by)){b.wx=Math.max(0,Math.min(XMAX,bx));b.wy=Math.max(0,Math.min(YMAX,by));}}}
+    const cell=SEP||1,grid=new Map();
+    for(const a of list){const k=Math.floor(a.wx/cell)+','+Math.floor(a.wy/cell);let arr=grid.get(k);if(!arr){arr=[];grid.set(k,arr);}arr.push(a);}
+    for(const a of list){const cx=Math.floor(a.wx/cell),cy=Math.floor(a.wy/cell);
+      for(let ox=-1;ox<=1;ox++)for(let oy=-1;oy<=1;oy++){const arr=grid.get((cx+ox)+','+(cy+oy));if(!arr)continue;
+        for(const b of arr){if(b===a||b.id<=a.id)continue;let dx=b.wx-a.wx,dy=b.wy-a.wy,ds=Math.hypot(dx,dy);
+          if(ds===0){dx=Math.random()-.5;dy=Math.random()-.5;ds=Math.hypot(dx,dy)||1;}
+          if(ds<SEP){const push=(SEP-ds)/2*0.5,ux=dx/ds,uy=dy/ds,axx=a.wx-ux*push,ayy=a.wy-uy*push,bxx=b.wx+ux*push,byy=b.wy+uy*push;
+            if(walkable(axx,ayy)){a.wx=Math.max(0,Math.min(XMAX,axx));a.wy=Math.max(0,Math.min(YMAX,ayy));}if(walkable(bxx,byy)){b.wx=Math.max(0,Math.min(XMAX,bxx));b.wy=Math.max(0,Math.min(YMAX,byy));}}}}}
     // per-creature transform, evolution, animation
-    data.forEach(x=>{if(!x.grp)return;const _twt=(firePos&&Math.hypot(x.wx-firePos.wx,x.wy-firePos.wy)<4*d)?1:daylight;x.warmth=(x.warmth==null?_twt:x.warmth+(_twt-x.warmth)*0.012);const ddx=x.wx-(x._px==null?x.wx:x._px),ddy=x.wy-(x._py==null?x.wy:x._py);const dist=Math.hypot(ddx,ddy);
+    data.forEach(x=>{if(!x.grp)return;const _twt=(firePos&&fireLit&&Math.hypot(x.wx-firePos.wx,x.wy-firePos.wy)<4*d)?1:daylight;x.warmth=(x.warmth==null?_twt:x.warmth+(_twt-x.warmth)*0.012);const ddx=x.wx-(x._px==null?x.wx:x._px),ddy=x.wy-(x._py==null?x.wy:x._py);const dist=Math.hypot(ddx,ddy);
       const moving=dist>0.015;if(dist>1e-4&&now>=(x._emoteUntil||0)){x.yaw=Math.atan2(ddx,ddy)+FACE_OFF;}
       x._px=x.wx;x._py=x.wy;
       // move counting (per tile travelled) + evolution
-      x._acc=(x._acc||0)+dist;if(x._acc>=d){const n=Math.floor(x._acc/d);x._acc-=n*d;x.moveCount=(x.moveCount||0)+n;evolve(x);if(currentSel===x.id&&card){const ev=card.querySelector('.ev');if(ev)ev.textContent=evText(x);}}
+      x._acc=(x._acc||0)+dist;if(x._acc>=d){const n=Math.floor(x._acc/d);x._acc-=n*d;const bfr=x.moveCount||0;x.moveCount=bfr+n;const r0=Math.floor(bfr/10),r1=Math.floor(x.moveCount/10);for(let r=r0;r<r1;r++){if(x.stage<SPECIES[x.species].stages.length-1&&Math.random()<1/3){evolve(x);break;}}if(currentSel===x.id&&card){const ev=card.querySelector('.ev');if(ev)ev.textContent=evText(x);}}
       const gx=w2sx(x.wx),gy=groundY(x.wx,x.wy),gz=w2sz(x.wy);x.grp.position.set(gx,gy,gz);
       let ry=x.grp.rotation.y,dy=x.yaw-ry;while(dy>Math.PI)dy-=2*Math.PI;while(dy<-Math.PI)dy+=2*Math.PI;x.grp.rotation.y=ry+dy*0.2;
       // spawn/evolve pop
@@ -68227,12 +68271,12 @@ const MODELS={"m0":{
   // ---------- boot ----------
   async function boot(){
     resize();addEventListener('resize',()=>{resize();closeMenu();});
-    try{const keys=Object.keys(MODELS);for(const k of keys){const g=await loadModel(JSON.stringify(MODELS[k]));g.scene.traverse(o=>{if(o.isMesh&&o.material&&o.material.map){o.material.emissiveMap=o.material.map;o.material.emissive=new THREE.Color(0xffffff);o.material.emissiveIntensity=0.2;
+    try{const keys=Object.keys(MODELS);for(const k of keys){const g=await loadModel(JSON.stringify(MODELS[k]));g.scene.traverse(o=>{if(o.isMesh&&o.material&&o.material.map){o.material.emissiveMap=o.material.map;o.material.emissive=new THREE.Color(0xffffff);o.material.emissiveIntensity=0.2;creatureMats.push(o.material);
       o.material.onBeforeCompile=sh=>{sh.fragmentShader=sh.fragmentShader.replace('#include <map_fragment>','#include <map_fragment>\n{float _lm=dot(diffuseColor.rgb,vec3(0.2126,0.7152,0.0722));diffuseColor.rgb=clamp(mix(vec3(_lm),diffuseColor.rgb,1.45)*1.04,0.0,1.0);}');};
       o.material.needsUpdate=true;}});normalize(g.scene);PROTO[k]={scene:g.scene,clips:g.animations,clipsByName:clipMap(g.animations)};}}
     catch(e){document.getElementById('load').innerHTML='<div>Impossibile caricare i modelli 3D.</div>';return;}
     buildTerrain();buildFlora();buildSky();buildBridge();buildFire();fillDockThumbs();
-    const ld=document.getElementById('load');ld.style.opacity='0';setTimeout(()=>ld.remove(),420);
+    const ld=document.getElementById('load');ld.style.opacity='0';setTimeout(()=>ld.remove(),420);bootDone=true;setIntroAction();
     requestAnimationFrame(loop);
     // connect db
     if(!window.claude||!claude.use){mode='local';banner('Modalit\u00e0 locale \u2014 le modifiche non vengono salvate');return;}
