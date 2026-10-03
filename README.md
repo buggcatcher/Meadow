@@ -67,4 +67,4 @@ between creatures, with the terrain, and with you — rather than from stats.
 
 ---
 
-`built with claude pro in 3 sessions`
+`built with claude pro in 4 sessions`
