@@ -2,7 +2,7 @@
 
 A living, low-poly creature simulation you can watch, tend, and shape.
 
-![Meadow](docs/screenshot.png)
+![Meadow](docs/screenshot.png) ![Meadow](docs/screnshoot.png)
 
 Place little mushroom and cactus creatures on a tessellated world, and watch them
 roam, meet, bond, and evolve. It runs entirely in the browser — a single
