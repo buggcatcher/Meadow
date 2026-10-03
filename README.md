@@ -8,7 +8,7 @@ Place little mushroom and cactus creatures on a tessellated world, and watch the
 roam, meet, bond, and evolve. It runs entirely in the browser — a single
 self‑contained page, no install, no build step.
 
-**Live:** served `[here](https://buggcatcher.github.io/Meadow/)`.
+**Live:** served [here](https://buggcatcher.github.io/Meadow/).
 
 ---
 
