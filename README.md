@@ -49,19 +49,11 @@ between creatures, with the terrain, and with you — rather than from stats.
 
 ---
 
-## Multiplayer — coming soon
+## Roadmap
 
-Meadow is built on a **shared, persistent world**. The next step is **multiplayer**:
-creatures placed by different people will inhabit the **same meadow**, meet one
-another, and leave a mark that everyone can see.
-
-Planned alongside it:
-
-- a shared **hearth** to gather around in the evening — for warmth, cooking, and
-  forming bonds,
-- trails and history that the land itself remembers.
-
-*(These are on the roadmap — the current build is the single‑player sandbox.)*
+- **Cactus / mushroom symbiosis**: cacti moisten nearby soil, mushrooms make it fertile ->
+  sprouts grow into flowers and fruit (food).
+- **Multiplayer**: a shared, persistent meadow with a common hearth.
 
 ---
 
